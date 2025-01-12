@@ -44,7 +44,12 @@ defmodule PaintingAppWeb.PaintingLive do
     {:noreply, socket}
   end
 
+  defp color_for(nil), do: "#FFFFFF"
+  defp color_for(0), do: "#FF0000"
+  defp color_for(1), do: "#000000"
+
   defp style_for(pixel) do
-    "width: 10px; height: 10px; background-color: #{pixel.hex_code};"
+    "width: 10px; height: 10px; background-color: #{color_for(pixel)};"
   end
 end
+

@@ -1,8 +1,6 @@
 defmodule PaintingAppWeb.CanvasLive do
   use PaintingAppWeb, :live_view
 
-  defstruct Pixel[:hex_code]
-
   @topic "painting"
 
   def mount(_params, _session, socket) do
@@ -43,15 +41,9 @@ defmodule PaintingAppWeb.CanvasLive do
   # and broadcasting it to the painting topic
   def handle_event("generate", _params, socket) do
     new_canvas =
-      1..10
-      |> Enum.to_list
-      |> Enum.map(fn(_row_number) ->
-        1..10
-        |> Enum.to_list
-        |> Enum.map(fn(_column_number) ->
-          %Pixel{hex_code: color_for(:rand.uniform(2) - 1)}
-        end)
-      end)
+      for _ <- 1..10 do
+        for _ <- 1..10, do: :rand.uniform(2) - 1  # yields 0 or 1
+      end
 
     socket = assign(socket, :canvas, new_canvas)
 
@@ -64,7 +56,7 @@ defmodule PaintingAppWeb.CanvasLive do
     {:noreply, socket}
   end
 
-  defp color_for(nil), do: "#EFEFEF"
+  defp color_for(nil), do: "#FFFFFF"
   defp color_for(0), do: "#FF0000"
   defp color_for(1), do: "#000000"
 
@@ -72,3 +64,4 @@ defmodule PaintingAppWeb.CanvasLive do
     "width: 10px; height: 10px; background-color: #{color_for(pixel)};"
   end
 end
+
