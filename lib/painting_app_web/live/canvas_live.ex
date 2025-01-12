@@ -43,7 +43,7 @@ defmodule PaintingAppWeb.CanvasLive do
   def handle_event("generate", _params, socket) do
     new_canvas =
       for _ <- 1..10 do
-        for _ <- 1..10, do: :rand.uniform(2) - 1  # yields 0 or 1
+        for _ <- 1..10, do: :rand.uniform(13) - 1  # yields 0..12
       end
 
     socket = assign(socket, :canvas, new_canvas)
@@ -57,9 +57,20 @@ defmodule PaintingAppWeb.CanvasLive do
     {:noreply, socket}
   end
 
-  defp color_for(nil), do: "#FFFFFF"
-  defp color_for(0), do: "#FF0000"
-  defp color_for(1), do: "#000000"
+  defp color_for(nil), do: "#FFFFFF" # white
+  defp color_for(0), do: "#FF0000"   # bright red
+  defp color_for(1), do: "#FF7F00"   # orange
+  defp color_for(2), do: "#FFFF00"   # yellow
+  defp color_for(3), do: "#00FF00"   # lime
+  defp color_for(4), do: "#00FFFF"   # cyan
+  defp color_for(5), do: "#007FFF"   # azure
+  defp color_for(6), do: "#0000FF"   # blue
+  defp color_for(7), do: "#7F00FF"   # violet
+  defp color_for(8), do: "#FF00FF"   # magenta
+  defp color_for(9), do: "#FF0080"   # hot magenta-pink
+  defp color_for(10), do: "#FF69B4"  # hotpink
+  defp color_for(11), do: "#FFC0CB"  # pink
+  defp color_for(12), do: "#FFD700"  # gold
 
   defp style_for(pixel) do
     "width: 10px; height: 10px; background-color: #{color_for(pixel)};"
