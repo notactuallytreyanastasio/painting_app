@@ -35,7 +35,6 @@ defmodule PaintingAppWeb.CanvasComponent do
   def render(assigns) do
     ~H"""
     <div>
-      <h3>Canvas <%= @id %></h3>
       <table>
         <%= for row <- @canvas do %>
           <tr>

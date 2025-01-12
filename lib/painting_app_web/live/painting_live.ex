@@ -17,19 +17,12 @@ defmodule PaintingAppWeb.PaintingLive do
   def render(assigns) do
     ~H"""
     <h2>All Canvases</h2>
-    <div>
+    <div style="display: flex; flex-wrap: wrap;">
       <%= for {canvas_id, canvas_data} <- @canvases do %>
-        <table>
-          {canvas_id}
-          <%= for row <- canvas_data do %>
-            <tr>
-              <%= for pixel <- row do %>
-                <td style={style_for(pixel)}>
-                </td>
-              <% end %>
-            </tr>
-          <% end %>
-        </table>
+      <.live_component
+        module={PaintingAppWeb.CanvasComponent}
+        id={canvas_id}
+        canvas={canvas_data} />
       <% end %>
     </div>
     """
