@@ -14,6 +14,7 @@ defmodule PaintingApp.Application do
       {Phoenix.PubSub, name: PaintingApp.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: PaintingApp.Finch},
+      {PaintingApp.PaintingStore, []},
       # Start a worker by calling: PaintingApp.Worker.start_link(arg)
       # {PaintingApp.Worker, arg},
       # Start to serve requests, typically the last entry
