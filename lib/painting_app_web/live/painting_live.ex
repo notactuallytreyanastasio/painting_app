@@ -37,8 +37,4 @@ defmodule PaintingAppWeb.PaintingLive do
 
     {:noreply, socket}
   end
-
-  defp style_for(pixel) do
-    "width: 10px; height: 10px; background-color: #{pixel.hex};"
-  end
 end
