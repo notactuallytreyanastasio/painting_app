@@ -18,20 +18,17 @@ defmodule PaintingAppWeb.PaintingLive do
     ~H"""
     <h2>All Canvases</h2>
     <div>
-      <%= for {canvas_id, _canvas_data} <- @canvases do %>
-        <div style="display: inline-block; margin: 10px; vertical-align: top;">
-          <strong>{canvas_id}</strong>
-          <table>
-            <%= for row <- @canvas do %>
-              <tr>
-                <%= for pixel <- row do %>
-                  <td style={style_for(pixel)}>
-                  </td>
-                <% end %>
-              </tr>
-            <% end %>
-          </table>
-        </div>
+      <%= for {_canvas_id, canvas_data} <- @canvases do %>
+        <table>
+          <%= for row <- canvas_data do %>
+            <tr>
+              <%= for pixel <- row do %>
+                <td style={style_for(pixel)}>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </table>
       <% end %>
     </div>
     """
