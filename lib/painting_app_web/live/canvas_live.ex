@@ -20,6 +20,7 @@ defmodule PaintingAppWeb.CanvasLive do
   end
 
   def render(assigns) do
+    # TODO make this render a canvas component
     ~H"""
     <h2>Your Canvas</h2>
     <button phx-click="generate">Generate Canvas</button>
@@ -64,4 +65,3 @@ defmodule PaintingAppWeb.CanvasLive do
     "width: 10px; height: 10px; background-color: #{color_for(pixel)};"
   end
 end
-
