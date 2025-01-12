@@ -10,15 +10,20 @@ defmodule PaintingAppWeb.CanvasLive do
       |> Enum.to_list
       |> Enum.map(fn(_row) ->
         Enum.to_list(1..10)
-        |> Enum.map(fn(_col) -> %PaintingAppWeb.Pixel{hex: ["#a3a3a3", "000000", "FFFFFF"] |> Enum.shuffle |> Enum.take(1)} end)
+        |> Enum.map(fn(_col) -> %PaintingAppWeb.Pixel{hex: ["#a3a3a3", "#000000", "#FFFFFF", "#f2f3fg"] |> Enum.shuffle |> Enum.take(1)} end)
       end)
 
+    # this shows new connections in black and white
+    # but keeps the existing ones colored nicely with
+    # bright colors when people click generate
+    # however, because mount runs twice it broadcasts
+    # a blank one that we cant do much about, so we
+    # are just leaving that as an artistic touch
     Phoenix.PubSub.broadcast(
       PaintingApp.PubSub,
       @topic,
       {:canvas_updated, canvas_id, random_all_color_canvas}
     )
-
 
     # Assign the canvas data and canvas_id
     socket =
