@@ -8,7 +8,7 @@ defmodule PaintingAppWeb.CanvasLive do
     canvas_id = Ecto.UUID.generate()
 
     # Create a blank 10x10
-    blank_canvas = for _ <- 1..10, do: for(_ <- 1..10, do: nil)
+    blank_canvas = for _ <- 1..10, do: for(_ <- 1..10, do: %PaintingAppWeb.Pixel{hex: nil})
 
     # Assign the canvas data and canvas_id
     socket =
@@ -29,7 +29,7 @@ defmodule PaintingAppWeb.CanvasLive do
       <%= for row <- @canvas do %>
         <tr>
           <%= for pixel <- row do %>
-            <td style={style_for(pixel)}>
+            <td style={style_for(pixel.hex)}>
             </td>
           <% end %>
         </tr>
@@ -45,6 +45,9 @@ defmodule PaintingAppWeb.CanvasLive do
       for _ <- 1..10 do
         for _ <- 1..10, do: :rand.uniform(13) - 1  # yields 0..12
       end
+      |> Enum.map(fn(row) ->
+        Enum.map(row, fn(n) -> %PaintingAppWeb.Pixel{hex: color_for(n)} end)
+      end)
 
     socket = assign(socket, :canvas, new_canvas)
 
@@ -72,7 +75,7 @@ defmodule PaintingAppWeb.CanvasLive do
   defp color_for(11), do: "#FFC0CB"  # pink
   defp color_for(12), do: "#FFD700"  # gold
 
-  defp style_for(pixel) do
-    "width: 10px; height: 10px; background-color: #{color_for(pixel)};"
+  defp style_for(hex) do
+    "width: 10px; height: 10px; background-color: #{hex};"
   end
 end
