@@ -1,5 +1,6 @@
 defmodule PaintingAppWeb.CanvasLive do
   use PaintingAppWeb, :live_view
+  alias PaintingApp.PaintingStore
 
   @topic "painting"
 
@@ -29,7 +30,12 @@ defmodule PaintingAppWeb.CanvasLive do
     #     {:canvas_updated, canvas_id, random_all_color_canvas}
     #   )
 
-    # Assign the canvas data and canvas_id
+    # persist teh canvas to the ETS cache
+    PaintingStore.put_canvas(
+      canvas_id,
+      random_all_color_canvas
+    )
+    # Assign the canvas data and canvas_id in the UI
     socket =
       socket
       |> assign(:canvas_id, canvas_id)

@@ -1,5 +1,6 @@
 defmodule PaintingAppWeb.PaintingLive do
   use PaintingAppWeb, :live_view
+  alias PaintingApp.PaintingStore
 
   @topic "painting"
 
@@ -9,7 +10,8 @@ defmodule PaintingAppWeb.PaintingLive do
     end
 
     # We'll keep a map of canvas_id => 10x10 data
-    socket = assign(socket, :canvases, %{})
+    existing = PaintingStore.all_canvases()
+    socket = assign(socket, :canvases, existing)
 
     {:ok, socket}
   end
@@ -36,5 +38,9 @@ defmodule PaintingAppWeb.PaintingLive do
       end)
 
     {:noreply, socket}
+  end
+
+  defp style_for(pixel) do
+    "width: 10px; height: 10px; background-color: #{pixel.hex};"
   end
 end
