@@ -4,17 +4,27 @@ defmodule PaintingAppWeb.CanvasLive do
   @topic "painting"
 
   def mount(_params, _session, socket) do
-    # Generate a unique ID for this user's canvas
     canvas_id = Ecto.UUID.generate()
+    random_all_color_canvas =
+      1..10
+      |> Enum.to_list
+      |> Enum.map(fn(_row) ->
+        Enum.to_list(1..10)
+        |> Enum.map(fn(_col) -> %PaintingAppWeb.Pixel{hex: ["#a3a3a3", "000000", "FFFFFF"] |> Enum.shuffle |> Enum.take(1)} end)
+      end)
 
-    # Create a blank 10x10
-    blank_canvas = for _ <- 1..10, do: for(_ <- 1..10, do: %PaintingAppWeb.Pixel{hex: nil})
+    Phoenix.PubSub.broadcast(
+      PaintingApp.PubSub,
+      @topic,
+      {:canvas_updated, canvas_id, random_all_color_canvas}
+    )
+
 
     # Assign the canvas data and canvas_id
     socket =
       socket
       |> assign(:canvas_id, canvas_id)
-      |> assign(:canvas, blank_canvas)
+      |> assign(:canvas, random_all_color_canvas)
 
     {:ok, socket}
   end
@@ -74,6 +84,23 @@ defmodule PaintingAppWeb.CanvasLive do
   defp color_for(10), do: "#FF69B4"  # hotpink
   defp color_for(11), do: "#FFC0CB"  # pink
   defp color_for(12), do: "#FFD700"  # gold
+
+  defp random_hex_color do
+    # Generate a random color in the #RRGGBB range
+    "#" <> Integer.to_string(:rand.uniform(0xFFFFFF), 16)
+    |> String.pad_trailing(7, "0")  # Just to ensure 6 digits
+  end
+
+  def random_greyscale_hex do
+    # Grab a random number from 0 to 255
+    val = :rand.uniform(256) - 1
+
+    # Convert it to a 2-digit hex string (e.g., "00", "7f", "ff")
+    hex_val = val |> Integer.to_string(16) |> String.pad_leading(2, "0")
+
+    # Use the same hex substring for R, G, and B
+    "#{hex_val}#{hex_val}#{hex_val}"
+  end
 
   defp style_for(hex) do
     "width: 10px; height: 10px; background-color: #{hex};"
