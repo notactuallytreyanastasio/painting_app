@@ -22,7 +22,11 @@ defmodule PaintingApp.PaintingStore do
     :ets.insert(@table, {canvas_id, canvas_data})
 
     # Let everyone else (PaintingLive, etc.) know this canvas changed
-    Phoenix.PubSub.broadcast(PaintingApp.PubSub, @topic, {:canvas_updated, canvas_id, canvas_data})
+    Phoenix.PubSub.broadcast(
+      PaintingApp.PubSub,
+      @topic,
+      {:canvas_updated, canvas_id, canvas_data}
+    )
   end
 
   @doc """
@@ -52,4 +56,3 @@ defmodule PaintingApp.PaintingStore do
     {:ok, nil}
   end
 end
-

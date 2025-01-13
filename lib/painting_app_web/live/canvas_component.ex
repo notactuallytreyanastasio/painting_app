@@ -3,7 +3,6 @@ defmodule PaintingAppWeb.Pixel do
   defstruct [:hex]
 end
 
-
 defmodule PaintingAppWeb.CanvasComponent do
   use Phoenix.LiveComponent
 
@@ -14,18 +13,15 @@ defmodule PaintingAppWeb.CanvasComponent do
 
   @impl true
   def update(assigns, socket) do
-    # We'll accept either an existing 10x10 or create a new random one if none is passed.
-    # The parent can pass `canvas` as a 10x10 list of Pixel structs OR nil, etc.
-
     canvas =
       case assigns[:canvas] do
-        nil -> generate_canvas()       # If no data is passed in, create something fresh
-        existing -> existing           # If we have something from the parent, use it
+        nil -> generate_canvas()
+        existing -> existing
       end
 
     socket =
       socket
-      |> assign(:id, assigns.id)    # Live Components need a unique :id
+      |> assign(:id, assigns.id)
       |> assign(:canvas, canvas)
 
     {:ok, socket}
@@ -39,8 +35,7 @@ defmodule PaintingAppWeb.CanvasComponent do
         <%= for row <- @canvas do %>
           <tr>
             <%= for pixel <- row do %>
-              <td style={"width: 10px; height: 10px; background-color: #{pixel.hex};"}>
-              </td>
+              <td style={"width: 10px; height: 10px; background-color: #{pixel.hex};"}></td>
             <% end %>
           </tr>
         <% end %>
@@ -50,16 +45,21 @@ defmodule PaintingAppWeb.CanvasComponent do
   end
 
   defp generate_canvas do
-    for _row <- 1..10 do
-      for _col <- 1..10 do
+    1..10
+    |> Enum.to_list()
+    |> Enum.map(fn _row ->
+      1..10
+      |> Enum.to_list()
+      |> Enum.map(fn _col ->
         %PaintingAppWeb.Pixel{hex: random_hex_color()}
-      end
-    end
+      end)
+    end)
   end
 
   defp random_hex_color do
     # Generate a random color in the #RRGGBB range
-    "#" <> Integer.to_string(:rand.uniform(0xFFFFFF), 16)
-    |> String.pad_trailing(7, "0")  # Just to ensure 6 digits
+    ("#" <> Integer.to_string(:rand.uniform(0xFFFFFF), 16))
+    # Just to ensure 6 digits
+    |> String.pad_trailing(7, "0")
   end
 end

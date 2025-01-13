@@ -6,12 +6,17 @@ defmodule PaintingAppWeb.CanvasLive do
 
   def mount(_params, _session, socket) do
     canvas_id = Ecto.UUID.generate()
+
     random_all_color_canvas =
       1..10
-      |> Enum.to_list
-      |> Enum.map(fn(_row) ->
+      |> Enum.to_list()
+      |> Enum.map(fn _row ->
         Enum.to_list(1..10)
-        |> Enum.map(fn(_col) -> %PaintingAppWeb.Pixel{hex: ["#a3a3a3", "#000000", "#FFFFFF", "#f2f3fg"] |> Enum.shuffle |> Enum.take(1)} end)
+        |> Enum.map(fn _col ->
+          %PaintingAppWeb.Pixel{
+            hex: ["#a3a3a3", "#000000", "#FFFFFF", "#f2f3fg"] |> Enum.shuffle() |> Enum.take(1)
+          }
+        end)
       end)
 
     # this shows new connections in black and white
@@ -35,6 +40,7 @@ defmodule PaintingAppWeb.CanvasLive do
       canvas_id,
       random_all_color_canvas
     )
+
     # Assign the canvas data and canvas_id in the UI
     socket =
       socket
@@ -54,8 +60,7 @@ defmodule PaintingAppWeb.CanvasLive do
       <%= for row <- @canvas do %>
         <tr>
           <%= for pixel <- row do %>
-            <td style={style_for(pixel.hex)}>
-            </td>
+            <td style={style_for(pixel.hex)}></td>
           <% end %>
         </tr>
       <% end %>
@@ -68,10 +73,11 @@ defmodule PaintingAppWeb.CanvasLive do
   def handle_event("generate", _params, socket) do
     new_canvas =
       for _ <- 1..10 do
-        for _ <- 1..10, do: :rand.uniform(13) - 1  # yields 0..12
+        # yields 0..12
+        for _ <- 1..10, do: :rand.uniform(13) - 1
       end
-      |> Enum.map(fn(row) ->
-        Enum.map(row, fn(n) -> %PaintingAppWeb.Pixel{hex: color_for(n)} end)
+      |> Enum.map(fn row ->
+        Enum.map(row, fn n -> %PaintingAppWeb.Pixel{hex: color_for(n)} end)
       end)
 
     socket = assign(socket, :canvas, new_canvas)
@@ -85,20 +91,34 @@ defmodule PaintingAppWeb.CanvasLive do
     {:noreply, socket}
   end
 
-  defp color_for(nil), do: "#FFFFFF" # white
-  defp color_for(0), do: "#FF0000"   # bright red
-  defp color_for(1), do: "#FF7F00"   # orange
-  defp color_for(2), do: "#FFFF00"   # yellow
-  defp color_for(3), do: "#00FF00"   # lime
-  defp color_for(4), do: "#00FFFF"   # cyan
-  defp color_for(5), do: "#007FFF"   # azure
-  defp color_for(6), do: "#0000FF"   # blue
-  defp color_for(7), do: "#7F00FF"   # violet
-  defp color_for(8), do: "#FF00FF"   # magenta
-  defp color_for(9), do: "#FF0080"   # hot magenta-pink
-  defp color_for(10), do: "#FF69B4"  # hotpink
-  defp color_for(11), do: "#FFC0CB"  # pink
-  defp color_for(12), do: "#FFD700"  # gold
+  # white
+  defp color_for(nil), do: "#FFFFFF"
+  # bright red
+  defp color_for(0), do: "#FF0000"
+  # orange
+  defp color_for(1), do: "#FF7F00"
+  # yellow
+  defp color_for(2), do: "#FFFF00"
+  # lime
+  defp color_for(3), do: "#00FF00"
+  # cyan
+  defp color_for(4), do: "#00FFFF"
+  # azure
+  defp color_for(5), do: "#007FFF"
+  # blue
+  defp color_for(6), do: "#0000FF"
+  # violet
+  defp color_for(7), do: "#7F00FF"
+  # magenta
+  defp color_for(8), do: "#FF00FF"
+  # hot magenta-pink
+  defp color_for(9), do: "#FF0080"
+  # hotpink
+  defp color_for(10), do: "#FF69B4"
+  # pink
+  defp color_for(11), do: "#FFC0CB"
+  # gold
+  defp color_for(12), do: "#FFD700"
 
   defp style_for(hex) do
     "width: 10px; height: 10px; background-color: #{hex};"

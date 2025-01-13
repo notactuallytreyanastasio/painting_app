@@ -1,6 +1,6 @@
 defmodule PaintingAppWeb.PaintingLive do
   use PaintingAppWeb, :live_view
-  alias PaintingApp.PaintingStore
+  # alias PaintingApp.PaintingStore
 
   @topic "painting"
 
@@ -10,8 +10,9 @@ defmodule PaintingAppWeb.PaintingLive do
     end
 
     # We'll keep a map of canvas_id => 10x10 data
-    existing = PaintingStore.all_canvases()
-    socket = assign(socket, :canvases, existing)
+    # existing = PaintingStore.all_canvases()
+    # socket = assign(socket, :canvases, existing)
+    socket = assign(socket, :canvases, %{})
 
     {:ok, socket}
   end
@@ -21,10 +22,7 @@ defmodule PaintingAppWeb.PaintingLive do
     <h2>All Canvases</h2>
     <div style="display: flex; flex-wrap: wrap;">
       <%= for {canvas_id, canvas_data} <- @canvases do %>
-      <.live_component
-        module={PaintingAppWeb.CanvasComponent}
-        id={canvas_id}
-        canvas={canvas_data} />
+        <.live_component module={PaintingAppWeb.CanvasComponent} id={canvas_id} canvas={canvas_data} />
       <% end %>
     </div>
     """
